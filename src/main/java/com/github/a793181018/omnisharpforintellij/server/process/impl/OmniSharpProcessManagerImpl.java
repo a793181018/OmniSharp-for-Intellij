@@ -148,6 +148,11 @@ public class OmniSharpProcessManagerImpl implements IOmniSharpProcessManager {
     }
     
     @Override
+    public Process getProcess() {
+        return process.get();
+    }
+    
+    @Override
     public ProcessInputWriter getProcessInputWriter() {
         return inputWriter;
     }

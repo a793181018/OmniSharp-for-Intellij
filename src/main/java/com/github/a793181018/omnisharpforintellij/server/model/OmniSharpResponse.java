@@ -1,5 +1,6 @@
 package com.github.a793181018.omnisharpforintellij.server.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -9,26 +10,39 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OmniSharpResponse<T> {
     private static final AtomicLong RESPONSE_SEQ_COUNTER = new AtomicLong(1);
     
+    @SerializedName("command")
     private final String command;
-    private final long requestSeq;
-    private final long responseSeq;
+    
+    @SerializedName("request_seq")
+    private final long request_seq;
+    
+    @SerializedName("seq")
+    private final long seq;
+    
+    @SerializedName("type")
     private final String type = "response";
+    
+    @SerializedName("body")
     private final T body;
+    
+    @SerializedName("success")
     private final boolean success;
+    
+    @SerializedName("message")
     private final String message;
     
     /**
      * 创建OmniSharp响应
      * @param command 命令路径
-     * @param requestSeq 请求序列号
+     * @param request_seq 请求序列号
      * @param body 响应数据
      * @param success 是否成功
      * @param message 消息
      */
-    public OmniSharpResponse(String command, long requestSeq, T body, boolean success, String message) {
+    public OmniSharpResponse(String command, long request_seq, T body, boolean success, String message) {
         this.command = command;
-        this.requestSeq = requestSeq;
-        this.responseSeq = RESPONSE_SEQ_COUNTER.getAndIncrement();
+        this.request_seq = request_seq;
+        this.seq = RESPONSE_SEQ_COUNTER.getAndIncrement();
         this.body = body;
         this.success = success;
         this.message = message;
@@ -38,12 +52,12 @@ public class OmniSharpResponse<T> {
         return command;
     }
     
-    public long getRequestSeq() {
-        return requestSeq;
+    public long getRequest_seq() {
+        return request_seq;
     }
     
-    public long getResponseSeq() {
-        return responseSeq;
+    public long getSeq() {
+        return seq;
     }
     
     public String getType() {

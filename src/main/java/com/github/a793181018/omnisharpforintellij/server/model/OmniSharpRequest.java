@@ -1,5 +1,6 @@
 package com.github.a793181018.omnisharpforintellij.server.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,10 +12,19 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OmniSharpRequest<T> {
     private static final AtomicLong REQUEST_SEQ_COUNTER = new AtomicLong(1);
     
+    @SerializedName("command")
     private final String command;
+    
+    @SerializedName("arguments")
     private final Map<String, Object> arguments;
+    
+    // 不序列化responseType
     private final Class<T> responseType;
-    private final long requestSeq;
+    
+    @SerializedName("seq")
+    private final long seq;
+    
+    @SerializedName("type")
     private final String type = "request";
     
     /**
@@ -27,7 +37,16 @@ public class OmniSharpRequest<T> {
         this.command = command;
         this.arguments = arguments != null ? arguments : new HashMap<>();
         this.responseType = responseType;
-        this.requestSeq = REQUEST_SEQ_COUNTER.getAndIncrement();
+        this.seq = REQUEST_SEQ_COUNTER.getAndIncrement();
+    }
+    
+    /**
+     * 创建OmniSharp请求（无类型参数）
+     * @param command 命令路径
+     * @param arguments 请求参数
+     */
+    public OmniSharpRequest(String command, Map<String, Object> arguments) {
+        this(command, arguments, null);
     }
     
     public String getCommand() {
@@ -42,8 +61,12 @@ public class OmniSharpRequest<T> {
         return responseType;
     }
     
+    public long getSeq() {
+        return seq;
+    }
+    
     public long getRequestSeq() {
-        return requestSeq;
+        return getSeq();
     }
     
     public String getType() {

@@ -1,5 +1,6 @@
 package com.github.a793181018.omnisharpforintellij.server.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -9,9 +10,16 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OmniSharpEvent<T> {
     private static final AtomicLong EVENT_SEQ_COUNTER = new AtomicLong(1);
     
+    @SerializedName("event")
     private final String event;
-    private final long seq;
+    
+    @SerializedName("seq")
+    private long seq;
+    
+    @SerializedName("type")
     private final String type = "event";
+    
+    @SerializedName("body")
     private final T body;
     
     /**
@@ -31,6 +39,10 @@ public class OmniSharpEvent<T> {
     
     public long getSeq() {
         return seq;
+    }
+    
+    public void setSeq(long seq) {
+        this.seq = seq;
     }
     
     public String getType() {

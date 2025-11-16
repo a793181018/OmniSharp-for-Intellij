@@ -36,6 +36,12 @@ public interface IOmniSharpProcessManager {
     boolean isProcessRunning();
     
     /**
+     * 获取当前的进程实例
+     * @return 进程实例，如果未运行则返回null
+     */
+    Process getProcess();
+    
+    /**
      * 获取进程的输入流写入器
      * @return 进程输入流写入器
      */
