@@ -49,6 +49,9 @@
     <project-component>
       <implementation-class>com.github.a793181018.omnisharpforintellij.configuration.OmniSharpConfigurationImpl</implementation-class>
     </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.editor.diagnostics.impl.OmniSharpDiagnosticsService</implementation-class>
+    </project-component>
   </components>
 
   <!-- 扩展点注册 -->
@@ -60,6 +63,20 @@
     <lang.psiStructureViewFactory 
         language="C#" 
         implementationClass="com.github.a793181018.omnisharpforintellij.editor.navigation.structure.impl.OmniSharpStructureViewFactory" />
+
+    <!-- 诊断工具窗口 -->
+    <toolWindow 
+        id="OmniSharp Diagnostics" 
+        anchor="bottom" 
+        factoryClass="com.github.a793181018.omnisharpforintellij.editor.diagnostics.impl.OmniSharpDiagnosticsToolWindowFactory" 
+        icon="AllIcons.Toolwindows.Problems" 
+        canCloseContents="true" 
+        secondary="false" />
+
+    <!-- 诊断标注器 -->
+    <annotator 
+        language="C#" 
+        implementationClass="com.github.a793181018.omnisharpforintellij.editor.diagnostics.impl.OmniSharpDiagnosticsAnnotator" />
 
     <!-- 设置页面 -->
     <applicationConfigurable 
@@ -74,6 +91,14 @@
         groupId="tools" 
         groupPath="OmniSharp" 
         displayName="OmniSharp" />
+    
+    <!-- 诊断设置页面 -->
+    <projectConfigurable 
+        instance="com.github.a793181018.omnisharpforintellij.editor.diagnostics.impl.OmniSharpDiagnosticsConfig" 
+        id="OmniSharpDiagnosticsSettings" 
+        groupId="tools" 
+        groupPath="OmniSharp/Diagnostics" 
+        displayName="Diagnostics" />
   </extensions>
 
   <!-- 资源路径 -->
