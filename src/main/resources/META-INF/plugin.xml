@@ -56,6 +56,11 @@
     <!-- 项目管理器监听器 -->
     <projectManagerListener implementation="com.github.a793181018.omnisharpforintellij.server.OmniSharpServerManager$ProjectCloseListener" />
 
+    <!-- 文件结构视图工厂 -->
+    <lang.psiStructureViewFactory 
+        language="C#" 
+        implementationClass="com.github.a793181018.omnisharpforintellij.editor.navigation.structure.impl.OmniSharpStructureViewFactory" />
+
     <!-- 设置页面 -->
     <applicationConfigurable 
         instance="com.github.a793181018.omnisharpforintellij.configuration.OmniSharpConfigurable" 
