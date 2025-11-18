@@ -1,15 +1,76 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin>
-    <id>com.github.a793181018.omnisharpforintellij</id>
-    <name>OmniSharp-for-Intellij</name>
-    <vendor>a793181018</vendor>
+  <id>com.github.a793181018.omnisharpforintellij</id>
+  <name>OmniSharp for IntelliJ</name>
+  <version>1.0.0</version>
+  <vendor email="your.email@example.com" url="https://github.com/a793181018/OmniSharp-for-Intellij">a793181018</vendor>
 
-    <depends>com.intellij.modules.platform</depends>
+  <description><![CDATA[
+    OmniSharp integration for IntelliJ IDEA and other JetBrains IDEs.
+    Provides C# language support through the OmniSharp server.
+  ]]></description>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
+  <change-notes><![CDATA[
+    <p>Initial release of OmniSharp for IntelliJ.</p>
+    <p>Features:</p>
+    <ul>
+      <li>Integration with OmniSharp server</li>
+      <li>Session management for multiple projects</li>
+      <li>Configurable server settings</li>
+    </ul>
+  ]]></change-notes>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.a793181018.omnisharpforintellij.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.a793181018.omnisharpforintellij.startup.MyProjectActivity" />
-    </extensions>
+  <!-- 插件兼容性设置 -->
+  <idea-version since-build="211.7142" />
+
+  <!-- 依赖的其他插件 -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <!-- 插件组件注册 -->
+  <components>
+    <!-- 应用级组件 -->
+    <component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.OmniSharpPlugin</implementation-class>
+    </component>
+    <component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.configuration.OmniSharpSettings</implementation-class>
+    </component>
+
+    <!-- 项目级组件 -->
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.OmniSharpProjectComponent</implementation-class>
+    </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.session.OmniSharpSessionManager</implementation-class>
+    </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.server.OmniSharpServerManager</implementation-class>
+    </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.configuration.OmniSharpConfigurationImpl</implementation-class>
+    </project-component>
+  </components>
+
+  <!-- 扩展点注册 -->
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- 项目管理器监听器 -->
+    <projectManagerListener implementation="com.github.a793181018.omnisharpforintellij.server.OmniSharpServerManager$ProjectCloseListener" />
+
+    <!-- 设置页面 -->
+    <applicationConfigurable 
+        instance="com.github.a793181018.omnisharpforintellij.configuration.OmniSharpConfigurable" 
+        id="OmniSharpSettings" 
+        groupId="tools" 
+        groupPath="OmniSharp" 
+        displayName="OmniSharp" />
+    <projectConfigurable 
+        instance="com.github.a793181018.omnisharpforintellij.configuration.OmniSharpConfigurable" 
+        id="OmniSharpProjectSettings" 
+        groupId="tools" 
+        groupPath="OmniSharp" 
+        displayName="OmniSharp" />
+  </extensions>
+
+  <!-- 资源路径 -->
+  <resource-bundle>messages.OmniSharpBundle</resource-bundle>
 </idea-plugin>
