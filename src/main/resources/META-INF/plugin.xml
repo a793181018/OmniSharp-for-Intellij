@@ -17,6 +17,8 @@
       <li>Integration with OmniSharp server</li>
       <li>Session management for multiple projects</li>
       <li>Configurable server settings</li>
+      <li>Code formatting support</li>
+      <li>Automatic formatting on save</li>
     </ul>
   ]]></change-notes>
 
@@ -52,12 +54,21 @@
     <project-component>
       <implementation-class>com.github.a793181018.omnisharpforintellij.editor.diagnostics.impl.OmniSharpDiagnosticsService</implementation-class>
     </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.editor.formatting.OmniSharpFormattingService</implementation-class>
+    </project-component>
+    <project-component>
+      <implementation-class>com.github.a793181018.omnisharpforintellij.editor.formatting.OmniSharpFormattingSettings</implementation-class>
+    </project-component>
   </components>
 
   <!-- 扩展点注册 -->
   <extensions defaultExtensionNs="com.intellij">
     <!-- 项目管理器监听器 -->
     <projectManagerListener implementation="com.github.a793181018.omnisharpforintellij.server.OmniSharpServerManager$ProjectCloseListener" />
+    
+    <!-- 文件保存监听器 -->
+    <fileDocumentManagerListener implementation="com.github.a793181018.omnisharpforintellij.editor.formatting.listener.OmniSharpDocumentFormattingListener" />
 
     <!-- 文件结构视图工厂 -->
     <lang.psiStructureViewFactory 
@@ -99,7 +110,40 @@
         groupId="tools" 
         groupPath="OmniSharp/Diagnostics" 
         displayName="Diagnostics" />
+    
+    <!-- 格式化设置页面 -->
+    <projectConfigurable 
+        instance="com.github.a793181018.omnisharpforintellij.editor.formatting.config.OmniSharpFormattingConfigurable" 
+        id="OmniSharpFormattingSettings" 
+        groupId="tools" 
+        groupPath="OmniSharp/Formatting" 
+        displayName="Formatting" />
   </extensions>
+
+  <!-- 操作注册 -->
+  <actions>
+    <!-- 代码格式化操作 -->
+    <action id="OmniSharpReformatCode"
+            class="com.github.a793181018.omnisharpforintellij.editor.formatting.action.OmniSharpReformatCodeAction"
+            text="Reformat Code"
+            description="Reformat C# code using OmniSharp">
+      <add-to-group group-id="CodeMenu" anchor="first"/>
+      <add-to-group group-id="EditorActions" anchor="first"/>
+      <add-to-group group-id="GenerateGroup" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt L"/>
+    </action>
+    
+    <!-- 选择格式化操作 -->
+    <action id="OmniSharpReformatSelection"
+            class="com.github.a793181018.omnisharpforintellij.editor.formatting.action.OmniSharpReformatSelectionAction"
+            text="Reformat Selection"
+            description="Reformat selected C# code using OmniSharp">
+      <add-to-group group-id="CodeMenu" anchor="first"/>
+      <add-to-group group-id="EditorActions" anchor="first"/>
+      <add-to-group group-id="GenerateGroup" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt L"/>
+    </action>
+  </actions>
 
   <!-- 资源路径 -->
   <resource-bundle>messages.OmniSharpBundle</resource-bundle>
