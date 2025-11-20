@@ -34,9 +34,15 @@ repositories {
 dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.opentest4j)
+    // 添加Mockito依赖用于测试
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
     
     // 添加Reactor依赖，用于响应式编程
     implementation("io.projectreactor:reactor-core:3.6.5")
+    
+    // 添加Google Guice依赖，用于依赖注入
+    implementation("com.google.inject:guice:7.0.0")
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
