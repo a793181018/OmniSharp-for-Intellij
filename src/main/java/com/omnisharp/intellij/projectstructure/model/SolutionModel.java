@@ -15,6 +15,7 @@ public class SolutionModel {
     private final Map<String, ProjectModel> projects;
     private final Map<String, SolutionConfiguration> configurations;
     private final String version;
+    private final Map<String, Map<String, String>> globalSections;
 
     public SolutionModel(
             String name,
@@ -27,6 +28,15 @@ public class SolutionModel {
         this.projects = projects != null ? new HashMap<>(projects) : new HashMap<>();
         this.configurations = configurations != null ? configurations : Collections.emptyMap();
         this.version = version;
+        this.globalSections = new HashMap<>();
+    }
+    
+    /**
+     * 获取解决方案的全局配置节
+     * @return 全局配置节的映射，键为节名称，值为配置项映射
+     */
+    public Map<String, Map<String, String>> getGlobalSections() {
+        return globalSections;
     }
 
     public String getName() {
@@ -37,7 +47,19 @@ public class SolutionModel {
         return path;
     }
 
-    public Collection<ProjectModel> getProjects() {
+    /**
+     * 获取所有项目的映射
+     * @return 项目ID到项目模型的映射
+     */
+    public Map<String, ProjectModel> getProjects() {
+        return projects;
+    }
+
+    /**
+     * 获取所有项目的集合
+     * @return 项目模型集合
+     */
+    public Collection<ProjectModel> getProjectList() {
         return projects.values();
     }
 
@@ -73,6 +95,19 @@ public class SolutionModel {
         return configurations;
     }
 
+    /**
+     * 获取解决方案的配置信息
+     * @return 配置信息映射
+     */
+    public Map<String, String> getConfiguration() {
+        Map<String, String> config = new HashMap<>();
+        config.put("name", name);
+        config.put("path", path);
+        config.put("version", version);
+        config.put("projectCount", String.valueOf(projects.size()));
+        return config;
+    }
+
     public String getVersion() {
         return version;
     }
@@ -88,28 +123,12 @@ public class SolutionModel {
     public ProjectModel getProject(String projectId) {
         return projects.get(projectId);
     }
-
-    public Collection<ProjectModel> getAllProjects() {
-        return projects.values();
-    }
-
-    public ProjectModel getProjectByName(String projectName) {
-        return projects.values().stream()
-                .filter(project -> project.getName().equals(projectName))
-                .findFirst()
-                .orElse(null);
-    }
-
+    
+    /**
+     * 获取项目数量
+     * @return 项目数量
+     */
     public int getProjectCount() {
         return projects.size();
-    }
-
-    public SolutionConfiguration getConfiguration(String name) {
-        return configurations.get(name);
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + getProjectCount() + " projects)";
     }
 }

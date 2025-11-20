@@ -6,5 +6,6 @@ package com.omnisharp.intellij.projectstructure.model;
 public enum ProjectLanguage {
     CSHARP,
     FSHARP,
-    VISUAL_BASIC
+    VISUAL_BASIC,
+    WEB
 }

@@ -73,16 +73,7 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
                     projectId,
                     projectFilePath.substring(projectFilePath.lastIndexOf('/') + 1).replace(".csproj", ""),
                     projectFilePath,
-                    projectFilePath.substring(0, projectFilePath.lastIndexOf('/')), // directory
-                    "bin/Debug/netstandard2.0", // outputPath
-                    projectFilePath.substring(projectFilePath.lastIndexOf('/') + 1).replace(".csproj", ""), // assemblyName
-                    "netstandard2.0", // targetFramework
-                    new HashMap<>(), // configurations
-                    Collections.emptyList(), // projectReferences
-                    Collections.emptyList(), // packageReferences
-                    Collections.emptyList(), // fileReferences
-                    Collections.emptyList(), // projectFiles
-                    ProjectLanguage.CSHARP // language
+                    "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}" // C# 项目类型GUID
             );
             
             projectCache.put(projectId, project);
@@ -104,7 +95,7 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
     @Override
     public List<ProjectModel> getProjects(String solutionId) {
         if (currentSolution != null && currentSolution.getId().equals(solutionId)) {
-            return new ArrayList<>(currentSolution.getProjects());
+            return new ArrayList<>(currentSolution.getProjects().values());
         }
         return Collections.emptyList();
     }

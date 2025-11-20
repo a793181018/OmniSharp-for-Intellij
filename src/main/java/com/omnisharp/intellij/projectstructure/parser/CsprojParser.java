@@ -51,23 +51,14 @@ public class CsprojParser implements ProjectParser {
                     projectId,                          // id
                     projectName,                        // name
                     projectPath,                        // path
-                    projectFilePath.getParent().toString(), // directory
-                    "bin/Debug/",                       // outputPath (默认值)
-                    projectName,                        // assemblyName
-                    parseTargetFrameworks(projectFilePath) != null && !parseTargetFrameworks(projectFilePath).isEmpty() ? parseTargetFrameworks(projectFilePath).get(0) : "netstandard2.0", // targetFramework
-                    new HashMap<>(),                    // configurations
-                    new ArrayList<>(),                  // projectReferences
-                    new ArrayList<>(),                  // packageReferences
-                    new ArrayList<>(),                  // fileReferences
-                    new ArrayList<>(),                  // projectFiles
-                    ProjectLanguage.CSHARP              // language (默认C#)
+                    "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}" // C# 项目类型GUID
             );
 
             // 设置项目属性
             properties.forEach(projectModel::setProperty);
 
             // 添加项目引用
-            parseProjectReferences(projectFilePath).forEach(projectModel::addProjectReference);
+            parseProjectReferences(projectFilePath).forEach(referenceId -> projectModel.addProjectDependency(referenceId));
             
             // 添加包引用
             parsePackageReferences(projectFilePath).forEach(projectModel::addPackageReference);

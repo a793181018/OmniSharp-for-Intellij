@@ -200,7 +200,7 @@ public class ProjectRepository {
         
         if (removed != null) {
             // 清理相关项目
-            removed.getProjects().forEach(project -> {
+            removed.getProjects().values().forEach(project -> {
                 String projectPath = Paths.get(project.getPath()).normalize().toString();
                 activeProjects.remove(projectPath);
             });

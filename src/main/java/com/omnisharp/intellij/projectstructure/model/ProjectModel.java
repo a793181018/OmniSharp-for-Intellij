@@ -1,55 +1,44 @@
 package com.omnisharp.intellij.projectstructure.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 表示一个C#项目，包含项目配置、引用和文件信息
+ * 表示一个C#项目的模型
  */
 public class ProjectModel {
     private final String id;
     private final String name;
     private final String path;
-    private final String directory;
-    private final String outputPath;
-    private final String assemblyName;
-    private final String targetFramework;
-    private final Map<String, ProjectConfiguration> configurations;
-    private final List<String> projectReferences;
+    private final String typeGuid;
+    private final Map<String, String> properties;
+    private final List<ProjectReference> projectReferences;
     private final List<PackageReference> packageReferences;
     private final List<FileReference> fileReferences;
-    private final List<String> projectFiles;
-    private final ProjectLanguage language;
+    private final List<String> compileFiles;
+    private final Map<String, ProjectConfiguration> configurations;
+    private ProjectLanguage language = ProjectLanguage.CSHARP;
+    private String directory;
+    private String assemblyName;
 
-    public ProjectModel(
-            String id,
-            String name,
-            String path,
-            String directory,
-            String outputPath,
-            String assemblyName,
-            String targetFramework,
-            Map<String, ProjectConfiguration> configurations,
-            List<String> projectReferences,
-            List<PackageReference> packageReferences,
-            List<FileReference> fileReferences,
-            List<String> projectFiles,
-            ProjectLanguage language) {
+    /**
+     * 构造函数，接收四个必需参数
+     * @param id 项目唯一标识符
+     * @param name 项目名称
+     * @param path 项目路径
+     * @param typeGuid 项目类型GUID
+     */
+    public ProjectModel(String id, String name, String path, String typeGuid) {
         this.id = id;
         this.name = name;
         this.path = path;
-        this.directory = directory;
-        this.outputPath = outputPath;
-        this.assemblyName = assemblyName;
-        this.targetFramework = targetFramework;
-        this.configurations = configurations != null ? configurations : Collections.emptyMap();
-        this.projectReferences = projectReferences != null ? new ArrayList<>(projectReferences) : new ArrayList<>();
-        this.packageReferences = packageReferences != null ? new ArrayList<>(packageReferences) : new ArrayList<>();
-        this.fileReferences = fileReferences != null ? new ArrayList<>(fileReferences) : new ArrayList<>();
-        this.projectFiles = projectFiles != null ? new ArrayList<>(projectFiles) : new ArrayList<>();
-        this.language = language != null ? language : ProjectLanguage.CSHARP;
+        this.typeGuid = typeGuid;
+        this.properties = new HashMap<>();
+        this.projectReferences = new ArrayList<>();
+        this.packageReferences = new ArrayList<>();
+        this.fileReferences = new ArrayList<>();
+        this.compileFiles = new ArrayList<>();
+        this.configurations = new HashMap<>();
+        this.language = ProjectLanguage.CSHARP; // 默认语言为C#
     }
 
     public String getId() {
@@ -64,82 +53,8 @@ public class ProjectModel {
         return path;
     }
 
-    public String getDirectory() {
-        return directory;
-    }
-
-    public String getOutputPath() {
-        return outputPath;
-    }
-
-    public String getAssemblyName() {
-        return assemblyName;
-    }
-
-    public String getTargetFramework() {
-        return targetFramework;
-    }
-
-    public Map<String, ProjectConfiguration> getConfigurations() {
-        return configurations;
-    }
-
-    public List<String> getProjectReferences() {
-        return projectReferences;
-    }
-
-    public List<PackageReference> getPackageReferences() {
-        return packageReferences;
-    }
-
-    public List<FileReference> getFileReferences() {
-        return fileReferences;
-    }
-
-    public List<String> getProjectFiles() {
-        return projectFiles;
-    }
-
-    
-
-    /**
-     * 添加包引用
-     * @param packageReference 包引用对象
-     */
-    public void addPackageReference(PackageReference packageReference) {
-        if (packageReference != null) {
-            this.packageReferences.add(packageReference);
-        }
-    }
-
-    /**
-     * 添加文件引用
-     * @param fileReference 文件引用对象
-     */
-    public void addFileReference(FileReference fileReference) {
-        if (fileReference != null) {
-            this.fileReferences.add(fileReference);
-        }
-    }
-
-    /**
-     * 添加编译文件
-     * @param compileFile 编译文件路径
-     */
-    public void addCompileFile(String compileFile) {
-        if (compileFile != null && !compileFile.isEmpty()) {
-            this.projectFiles.add(compileFile);
-        }
-    }
-
-    /**
-     * 添加项目引用
-     * @param projectReference 项目引用名称
-     */
-    public void addProjectReference(String projectReference) {
-        if (projectReference != null && !projectReference.isEmpty()) {
-            this.projectReferences.add(projectReference);
-        }
+    public String getTypeGuid() {
+        return typeGuid;
     }
 
     /**
@@ -148,18 +63,142 @@ public class ProjectModel {
      * @param value 属性值
      */
     public void setProperty(String key, String value) {
-        // 由于configurations是Map类型，我们需要添加相应的逻辑
-        // 这里简化实现，实际可能需要更复杂的处理
+        properties.put(key, value);
     }
 
-   
-
-    public ProjectConfiguration getConfiguration(String name) {
-        return configurations.get(name);
+    /**
+     * 获取项目属性映射
+     * @return 属性映射
+     */
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
-    @Override
-    public String toString() {
-        return name + " (" + language + ")";
+    /**
+     * 添加项目引用
+     * @param reference 项目引用
+     */
+    public void addProjectReference(ProjectReference reference) {
+        projectReferences.add(reference);
+    }
+
+    /**
+     * 获取项目引用列表
+     * @return 项目引用列表
+     */
+    public List<ProjectReference> getProjectReferences() {
+        return projectReferences;
+    }
+
+    /**
+     * 获取项目依赖的ID列表
+     * @return 项目依赖ID列表
+     */
+    public List<String> getProjectDependencies() {
+        List<String> dependencies = new ArrayList<>();
+        for (ProjectReference ref : projectReferences) {
+            dependencies.add(ref.getProjectId());
+        }
+        return dependencies;
+    }
+
+    /**
+     * 添加NuGet包引用
+     * @param reference 包引用
+     */
+    public void addPackageReference(PackageReference reference) {
+        packageReferences.add(reference);
+    }
+
+    /**
+     * 获取NuGet包引用列表
+     * @return 包引用列表
+     */
+    public List<PackageReference> getPackageReferences() {
+        return packageReferences;
+    }
+
+    /**
+     * 添加文件引用
+     * @param reference 文件引用
+     */
+    public void addFileReference(FileReference reference) {
+        fileReferences.add(reference);
+    }
+
+    /**
+     * 获取文件引用列表
+     * @return 文件引用列表
+     */
+    public List<FileReference> getFileReferences() {
+        return fileReferences;
+    }
+
+    /**
+     * 添加编译文件
+     * @param filePath 文件路径
+     */
+    public void addCompileFile(String filePath) {
+        compileFiles.add(filePath);
+    }
+
+    /**
+     * 获取编译文件列表
+     * @return 编译文件列表
+     */
+    public List<String> getCompileFiles() {
+        return compileFiles;
+    }
+
+    /**
+     * 添加项目配置
+     * @param configurationName 配置名称
+     * @param configuration 项目配置
+     */
+    public void addConfiguration(String configurationName, ProjectConfiguration configuration) {
+        configurations.put(configurationName, configuration);
+    }
+
+    /**
+     * 获取项目配置映射
+     * @return 配置映射
+     */
+    public Map<String, ProjectConfiguration> getConfigurations() {
+        return configurations;
+    }
+
+    /**
+     * 添加项目依赖ID
+     * @param projectId 项目ID
+     */
+    public void addProjectDependency(String projectId) {
+        this.projectReferences.add(new ProjectReference(projectId));
+    }
+
+    /**
+     * 设置项目配置映射
+     * @param configurations 配置映射
+     */
+    public void setConfigurations(Map<String, ProjectConfiguration> configurations) {
+        this.configurations.clear();
+        if (configurations != null) {
+            this.configurations.putAll(configurations);
+        }
+    }
+    
+    public void setLanguage(ProjectLanguage language) {
+        this.language = language;
+    }
+    
+    public ProjectLanguage getLanguage() {
+        return language;
+    }
+    
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+    
+    public void setAssemblyName(String assemblyName) {
+        this.assemblyName = assemblyName;
     }
 }

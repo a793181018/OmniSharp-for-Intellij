@@ -101,7 +101,7 @@ public class ProjectStructureAnalysisExample {
                         solution.getName(), solution.getProjects().size());
                 
                 // 打印项目信息
-                for (ProjectModel project : solution.getProjects()) {
+                for (ProjectModel project : solution.getProjects().values()) {
                     logger.infof("  - Project: %s (%s)", project.getName(), project.getPath());
                 }
             }
@@ -228,7 +228,7 @@ public class ProjectStructureAnalysisExample {
         try (PerformanceMonitor.Timer timer = PerformanceMonitor.startTimer("analyze_dependencies")) {
             logger.info("Analyzing project dependencies...");
             
-            for (ProjectModel project : solution.getProjects()) {
+            for (ProjectModel project : solution.getProjects().values()) {
                 logger.infof("Analyzing dependencies for project: %s", project.getName());
                 
                 // 获取项目引用
