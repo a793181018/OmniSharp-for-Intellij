@@ -11,6 +11,17 @@ import java.util.List;
  * 依赖服务类，用于分析和管理项目依赖关系
  */
 public class DependencyService {
+    private static final DependencyService INSTANCE = new DependencyService();
+    
+    /**
+     * 获取依赖服务实例
+     * @param project 项目对象（未使用，但保持API一致性）
+     * @return 依赖服务实例
+     */
+    public static DependencyService getInstance(Object project) {
+        return INSTANCE;
+    }
+    
     
     /**
      * 获取项目的项目引用

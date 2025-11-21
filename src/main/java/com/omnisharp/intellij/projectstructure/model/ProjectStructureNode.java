@@ -44,6 +44,15 @@ public class ProjectStructureNode {
     public String getProjectId() {
         return projectId;
     }
+    
+    /**
+     * 获取节点ID
+     * @return 节点ID
+     */
+    public String getId() {
+        // 简单实现：使用路径作为ID
+        return getPath();
+    }
 
     public ProjectStructureNode getParent() {
         return parent;
@@ -94,6 +103,15 @@ public class ProjectStructureNode {
             return name;
         }
         return parent.getPath() + "/" + name;
+    }
+    
+    /**
+     * 获取节点的结构信息
+     * @return 节点结构标识符
+     */
+    public String getStructure() {
+        // 返回节点的路径作为结构标识符
+        return getPath();
     }
 
     @Override

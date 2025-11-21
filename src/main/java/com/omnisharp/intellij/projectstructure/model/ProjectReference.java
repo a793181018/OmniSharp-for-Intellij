@@ -35,7 +35,8 @@ public class ProjectReference {
     }
 
     public String getName() {
-        return name;
+        // 如果name为null，返回projectId作为名称
+        return name != null ? name : projectId;
     }
 
     public String getPath() {

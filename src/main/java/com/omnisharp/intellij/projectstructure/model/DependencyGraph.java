@@ -130,4 +130,28 @@ public class DependencyGraph {
         pathSet.remove(projectId);
         path.remove(path.size() - 1);
     }
+    
+    /**
+     * 获取所有项目名称
+     * @return 项目名称集合
+     */
+    public Set<String> getProjects() {
+        Set<String> allProjects = new HashSet<>(dependencies.keySet());
+        dependencies.values().forEach(allProjects::addAll);
+        return allProjects;
+    }
+    
+    /**
+     * 获取依赖关系映射（兼容可视化组件）
+     * @return 项目到其依赖引用的映射
+     */
+    public Map<String, Set<ProjectReference>> getDependencies() {
+        Map<String, Set<ProjectReference>> result = new HashMap<>();
+        dependencies.forEach((projectId, depProjects) -> {
+            Set<ProjectReference> refs = new HashSet<>();
+            depProjects.forEach(dep -> refs.add(new ProjectReference(dep)));
+            result.put(projectId, refs);
+        });
+        return result;
+    }
 }

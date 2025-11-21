@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -56,11 +58,11 @@ public class SolutionModel {
     }
 
     /**
-     * 获取所有项目的集合
-     * @return 项目模型集合
+     * 获取项目列表
+     * @return 项目模型列表
      */
     public Collection<ProjectModel> getProjectList() {
-        return projects.values();
+        return new ArrayList<>(projects.values());
     }
 
     /**

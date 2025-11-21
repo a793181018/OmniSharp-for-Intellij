@@ -606,6 +606,30 @@ public class ProjectModel {
     }
     
     /**
+     * 获取项目的结构信息
+     * @return 项目结构标识符
+     */
+    public String getStructure() {
+        // 返回项目的基本结构信息
+        return name + "-" + language + "-" + outputType;
+    }
+    
+    /**
+     * 设置程序集名称
+     */
+    public void setAssemblyName(String assemblyName) {
+        this.assemblyName = assemblyName;
+    }
+    
+    /**
+     * 获取程序集名称
+     * @return 程序集名称
+     */
+    public String getAssemblyName() {
+        return assemblyName;
+    }
+    
+    /**
      * 项目文件类型分类
      */
     public enum ProjectType {
@@ -614,9 +638,5 @@ public class ProjectModel {
         TEST,
         WEB,
         CONSOLE
-    }
-    
-    public void setAssemblyName(String assemblyName) {
-        this.assemblyName = assemblyName;
     }
 }

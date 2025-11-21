@@ -49,6 +49,15 @@ public class ProjectManagerService {
     }
     
     /**
+     * 获取当前打开的解决方案
+     * @return 当前解决方案模型，如果没有打开的解决方案则返回空
+     */
+    public java.util.Optional<SolutionModel> getCurrentSolution() {
+        // 返回空的Optional作为基本实现
+        return java.util.Optional.empty();
+    }
+    
+    /**
      * 添加文件系统监听器
      * @param solutionPath 解决方案路径
      * @param listener 文件系统监听器
