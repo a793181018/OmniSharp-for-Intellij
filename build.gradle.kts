@@ -35,7 +35,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.opentest4j)
     // 添加Mockito依赖用于测试
-    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito:mockito-core:5.20.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
     
     // 添加Reactor依赖，用于响应式编程
